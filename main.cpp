@@ -9,17 +9,25 @@
 int main(int argc, char *argv[]) {
 	//software backbone/infrastructure that allows mainJobA to carry on while helperJobB works asynchronously to update
 	//the computationally costly ingredient needed by mainJobA
-	
 	//mainJobA runs on one node, helperJobB runs on another node; updates via MPI
 	
-	int N = atoi(argv[1]);
+	if (argc != 2) {
+		std::cerr << "Usage: " << argv[0] << " N\n";
+		return -1;
+	}
 	
-	omp_set_num_threads(N);
+	const auto num_threads = atoi(argv[1]);
+	omp_set_num_threads(num_threads);
+	
+	//read in file for mainJobA
+	//read in file for helperJobB
 
 	double start = omp_get_wtime();
 	
 	double stop = omp_get_wtime();
 	
 	double time = (stop - start) * 1000;
+	
+	std::cout << time << endl;
   
 }
