@@ -20,9 +20,14 @@ int main(int argc, char *argv[]) {
 	omp_set_num_threads(num_threads);
 	
 	//read in file for mainJobA
+	//A = read in file
 	//read in file for helperJobB
+	//B = read in file
 
 	double start = omp_get_wtime();
+	
+	#pragma omp parallel shared (A,B,x,p) // x & p other parameters
+		//call mainJobA
 	
 	double stop = omp_get_wtime();
 	
