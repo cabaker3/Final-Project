@@ -1,13 +1,13 @@
 # Warnings
-WFLAGS	:= -Wall -Wextra -Wsign-conversion -Wsign-compare
+WFLAGS	:= -Wall -Wextra
 
 # Optimization and architecture
 OPT		:= -O3
-ARCH   	:= -march=native
 
 # Language standard
 CCSTD	:= -std=c99
 CXXSTD	:= -std=c++11
+
 
 # Linker options
 LDOPT 	:= $(OPT)
@@ -21,11 +21,17 @@ debug : LDFLAGS := -fsanitize=address
 debug : ARCH :=
 debug : $(EXEC)
 
-all : main
+all : main mainJobA helperJobB
 
 main: main.cpp
-	gcc -o3 main.cpp -o main.cpp
+	mpicxx $(CXXSTD) $(WFLAGS) $(OPT) -fopenmp -o $@ $<
+	
+mainJobA: mainJobA.cpp
+	$(CXXSTD) $(WFLAGS) $(OPT) -fopenmp -o $@ $<
+
+helperJobB: helperJobB.cpp
+	$(CXXSTD) $(WFLAGS) $(OPT) -fopenmp -o $@ $<
 
 .PHONY: clean
 clean:
-	rm -f main
+	@ rm -f $(EXEC) *.o
