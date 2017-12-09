@@ -3,6 +3,8 @@
 #include <fstream>
 #define OMPI_SKIP_MPICXX  /* Don't use OpenMPI's C++ bindings (they are deprecated) */
 #include <mpi.h>
+#include "mainJobA.cpp"
+#include "helperJobB.cpp"
 
 int main(int argc, char *argv[]) {
 	//software backbone/infrastructure that allows mainJobA to carry on while helperJobB works asynchronously to update
