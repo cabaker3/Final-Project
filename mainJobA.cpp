@@ -8,16 +8,20 @@
 //time integration of a deforming elastic body
   //done in FEA using numerical integration
   //implicit integration needs a Jacobian J
-float mainJobA(n_t,n_x,a,L,tmax,error_plots){
+float mainJobA(int n_t,int n_x,float a, int L, float tmax, int error_plots){
   float dx = L/(n_x - 1);
   float dt = tmax/(n_t - 1);
   float r = alpha * dt / pow(dx,2);
   float r2 = 1 - 2*r;
   
+  //set up iterations
+  
   //create arrays to save data for export
   //x = ... L,n_x
   //t = ... tmax,n_t
   //U = ... n_x,n_t
+  
+  //call helperJobB
 }
 /*int max_itr = 10;
 
