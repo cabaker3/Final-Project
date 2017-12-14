@@ -18,10 +18,23 @@ float mainJobA(int nt,int n_x,float a, int L, float tmax, int error_plots){
   
   //create arrays to save data for export
   //x = ... L,n_x
+  float **x = new float*[L];
+  for(int i = 0; i < L; ++i) {
+    x[i] = new float[n_x];
+  }
   //t = ... tmax,n_t
+  float **t = new float*[tmax];
+  for(int i = 0; i < tmax; ++i) {
+    t[i] = new float[nt];
+  }
   //U = ... n_x,n_t
+  float **U = new float*[n_x];
+  for(int i = 0; i < n_x; ++i) {
+    U[i] = new float[nt];
+  }
   
   //call helperJobB
+  helperJobB();
 }
 /*int max_itr = 10;
 
