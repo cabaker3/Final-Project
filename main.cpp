@@ -20,6 +20,7 @@ int main(int argc, char *argv[]) {
 	const auto num_threads = atoi(argv[1]);
 	omp_set_num_threads(num_threads);
 	
+	// get values for constants
 	if (argc != 3) {
 		L = 1;
 	}else{
@@ -56,14 +57,12 @@ int main(int argc, char *argv[]) {
 	
 	//create array to store result
 	
-	#pragma omp parallel shared (nt,n_x,a,L,tmax,errPlots)
-		//mainJobA(nt,n_x,a,L,tmax,errPlots); //save to array
+	#pragma omp parallel shared (L,g,dx.dt,IM)
+		float result = mainJobA(L,g,dx.dt,IM); //save to array
 	
 	double stop = omp_get_wtime();
 	
 	double time = (stop - start) * 1000;
 	
-	std::cout << time << endl;
-	//print out result
-  
+	std::cout << N << "\n" << result << "\n" << time << endl;
 }
