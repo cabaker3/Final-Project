@@ -64,6 +64,6 @@ int main(int argc, char *argv[]) {
 	double time = (stop - start) * 1000;
 	
 	std::cout << time << endl;
-	//print out array
+	//print out result
   
 }
