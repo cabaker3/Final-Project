@@ -26,10 +26,10 @@ all : main mainJobA helperJobB
 main: main.cpp
 	mpicxx $(CXXSTD) $(WFLAGS) $(OPT) -fopenmp -o $@ $<
 	
-mainJobA: mainJobA.cpp
+mainJobA: mainJobA_godunov.cpp
 	$(CXXSTD) $(WFLAGS) $(OPT) -fopenmp -o $@ $<
 
-helperJobB: helperJobB.cpp
+helperJobB: helperJobB_godunov.cpp
 	$(CXXSTD) $(WFLAGS) $(OPT) -fopenmp -o $@ $<
 
 .PHONY: clean
