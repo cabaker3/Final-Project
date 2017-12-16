@@ -3,8 +3,8 @@
 #include <fstream>
 #define OMPI_SKIP_MPICXX  /* Don't use OpenMPI's C++ bindings (they are deprecated) */
 #include <mpi.h>
-#include "mainJobA.cpp"
-#include "helperJobB.cpp"
+#include "mainJobA_godunov.cpp"
+#include "helperJobB_godunov.cpp"
 
 int main(int argc, char *argv[]) {
 	//software backbone/infrastructure that allows mainJobA to carry on while helperJobB works asynchronously to update
@@ -54,8 +54,6 @@ int main(int argc, char *argv[]) {
 	errPlots = 1;
 
 	double start = omp_get_wtime();
-	
-	//create array to store result
 	
 	#pragma omp parallel shared (L,g,dx.dt,IM)
 		float result = mainJobA(L,g,dx.dt,IM); //save to array
