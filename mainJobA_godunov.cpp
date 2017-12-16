@@ -1,12 +1,10 @@
 #include <iostream>
 #include "omp.h"
-#include "helperJobB.cpp"
+#include "helperJobB_godunov.cpp"
 #include <math.h>
 
 //run on the host using OpenMP
-//time integration of a deforming elastic body
-  //done in FEA using numerical integration
-  //implicit integration needs a Jacobian J
+
 float mainJobA(int L, float g, dx, dt, IM){
   //constant
   int i = 1;
@@ -56,11 +54,17 @@ float mainJobA(int L, float g, dx, dt, IM){
   
   int k = 1;
   
-  //initialize rho,u,et,p
+  //initialize rho,u,et,p,a,E,eigen, F,Qn1
   
   for(int t = 0; t <= 0.16; t+=dt){
     //call helperJobB
-    helperJobB(); //Flux & Qnew
+    F[][] = helperJobB(); //Flux
+    
+    for(int j = 1; j <= 3; j++){
+      for(int i = 2; i <= IM; i++){
+        Qn1[j][i] = Qold[j][i] - (dt/dx) * (F[j][i] - F[j][i-1]); 
+      }
+    }
     
     Qn1[][1] = Qi[][1];
     Qn1[][101] = Qi[][101];
@@ -99,6 +103,8 @@ float mainJobA(int L, float g, dx, dt, IM){
     
     k += 1;
   }
+  
+  //return ;
 }
 /*int max_itr = 10;
 
