@@ -21,9 +21,9 @@ float mainJobA(int L, float g, dx, dt, IM){
   //Lax Initial Conditions
   for(int x = 0; x <= 1; x+=dx){
     if(x <= 0.5){
-      Qi[][i] = {0.445; 0.311; 8.928};
+      Qi[][i] = {0.445, 0.311, 8.928};
     }else{
-      Qi[][i] = {0.5; 0; 1.4275};  
+      Qi[][i] = {0.5, 0, 1.4275};  
     }
     i += 1; //change to for loop
   }
@@ -62,10 +62,10 @@ float mainJobA(int L, float g, dx, dt, IM){
     a[i][] = sqrt(g*pi[i][]/rhoi[i][]);
     
     //Intial E Matrix
-    E[][i] = [rhoi[i][]*ui[i][], rhoi[i][]*pow(ui[i][],2) + pi[i][], eti[i][]*rhoi[i][]*ui[i][]+pi[i][]*ui[i][]];
+    E[][i] = {rhoi[i][]*ui[i][], rhoi[i][]*pow(ui[i][],2) + pi[i][], eti[i][]*rhoi[i][]*ui[i][]+pi[i][]*ui[i][]};
     
     //Eigenvalues
-    eigen[][i] = [ui[i][], ui[i][] + a[i][], ui[i][]-a[i][]];
+    eigen[][i] = {ui[i][], ui[i][] + a[i][], ui[i][]-a[i][]};
   }
   
   float alpha = max(abs(eigen));
