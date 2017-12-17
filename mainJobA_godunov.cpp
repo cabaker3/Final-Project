@@ -2,6 +2,12 @@
 #include "omp.h"
 #include "helperJobB_godunov.cpp"
 #include <math.h>
+#include <utility>
+#include <type_traits>
+#include <typeinfo>
+#include <cxxabi.h>
+
+using namespace std;
 
 //run on the host using OpenMP
 
@@ -15,17 +21,29 @@ float mainJobA(int L, float g, dx, dt, IM){
   //Lax Initial Conditions
   for(int x = 0; x <= 1; x+=dx){
     if(x <= 0.5){
-      Qi[1][i] = {0.445; 0.311; 8.928};
+      Qi[][i] = {0.445; 0.311; 8.928};
     }else{
-      Qi[1][i] = {0.5; 0; 1.4275};  
+      Qi[][i] = {0.5; 0; 1.4275};  
     }
     i += 1; //change to for loop
   }
   
   //create array Qold = Qi
+  auto Qold = new float [][];
+  memcpy(Qold, Qi, sizeof(Qold));
   //create array Qnew = Qold
+  auto Qnew = new float [][];
+  memcpy(Qnew, Qold, sizeof(Qnew));
   
   //Initial Flow Properties
+  auto rhoi = new float [][];
+  auto ui = new float [][];
+  auto eti = new float [][];
+  auto pi = new float [][];
+  auto a = new float [][];
+  auto E = new float [][];
+  auto eigen = new float [][];
+  
   //create array rhoi, ui, eti, pi, a, E, eigen
   for(int i = 1; i < IM+1; i++){
     //Density
@@ -38,7 +56,7 @@ float mainJobA(int L, float g, dx, dt, IM){
     eti[i][] = Qi[3][i] / rhoi[i][];
     
     //Pressure, from the equation of state
-    pi[i][] = ();
+    pi[i][] = (g-1) * (rhoi[i][]) * eti[i][] - 0.5 * rhoi[i][] * pow(ui[i][],2));
       
     //Speed of Sound
     a[i][] = sqrt(g*pi[i][]/rhoi[i][]);
@@ -52,9 +70,26 @@ float mainJobA(int L, float g, dx, dt, IM){
   
   float alpha = max(abs(eigen));
   
+  delete[] rhoi;
+  delete[] ui;
+  delete[] eti;
+  delete[] pi;
+  delete[] a;
+  delete[] E;
+  delete[] eigen;
+  
   int k = 1;
   
   //initialize rho,u,et,p,a,E,eigen, F,Qn1
+  auto rho = new float [][];
+  auto u = new float [][];
+  auto et = new float [][];
+  auto p = new float [][];
+  auto a = new float [][];
+  auto E = new float [][];
+  auto eigen = new float [][];
+  auto F = new float [][];
+  auto Qn1 = new float [][];
   
   for(int t = 0; t <= 0.16; t+=dt){
     //call helperJobB
@@ -82,7 +117,7 @@ float mainJobA(int L, float g, dx, dt, IM){
     et[i][] = Qnew[3][i] / rho[i][];
     
     //Pressure, from the equation of state
-    p[i][] = ();
+    p[i][] = (g-1) * (rho[i][] * et[i][] - 0.5 * rho[i][] * pow(u[i][],2));
       
     //Speed of Sound
     a[i][] = sqrt(g*p[i][]/rho[i][]);
