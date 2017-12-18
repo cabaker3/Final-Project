@@ -62,5 +62,5 @@ int main(int argc, char *argv[]) {
 	
 	double time = (stop - start) * 1000;
 	
-	std::cout << N << "\n" << result << "\n" << time << endl;
+	std::cout << N << "\n" << time << "\n";
 }
