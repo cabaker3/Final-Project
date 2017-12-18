@@ -54,6 +54,7 @@ void float mainJobA(int L, float g, dx, dt, IM){
   
   auto alpha = new float [row1][col1];
   
+  #pragma omp for
   for(int i = 1; i < IM+1; i++){
     //Density
     rhoi[i][] = Qi[1][i];
@@ -104,10 +105,12 @@ void float mainJobA(int L, float g, dx, dt, IM){
   auto etm = new float [row1][col3];
   auto pm = new float [row1][col3];
   
+  #pragma omp for
   for(int t = 0; t <= 0.16; t+=dt){
     //call helperJobB
     memcpy(F,helperJobB(alpha,E,Qold,Qnew,F),sizeof(F)); //Flux
     
+    #pragma omp for
     for(int j = 1; j <= 3; j++){
       for(int i = 2; i <= IM; i++){
         Qn1[j][i] = Qold[j][i] - (dt/dx) * (F[j][i] - F[j][i-1]); 
@@ -119,6 +122,7 @@ void float mainJobA(int L, float g, dx, dt, IM){
     Qnew = Qn1;
     Qold = Qnew;
     
+    #pragma omp for
     for(int i = 1; i < IM+1; i++){
     //Density
     rho[i][] = Qnew[1][i];
