@@ -53,8 +53,9 @@ int main(int argc, char *argv[]) {
 
 	double start = omp_get_wtime();
 	
-	#pragma omp parallel shared (L,g,dx.dt,IM)
+	#pragma omp parallel shared (L,g,dx.dt,IM){
 		mainJobA(L,g,dx,dt,IM); 
+	}
 	
 	double stop = omp_get_wtime();
 	
