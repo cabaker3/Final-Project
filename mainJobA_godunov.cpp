@@ -11,12 +11,17 @@ using namespace std;
 
 //run on the host using OpenMP
 
-float mainJobA(int L, float g, dx, dt, IM){
+void float mainJobA(int L, float g, dx, dt, IM){
   //constant
   int i = 1;
+  int row1 = 101;
+  int row2 = 3;
+  int col1 = 1;
+  int col2 = 101;
+  int col3 = 81;
   
   //create 2D array Qi
-  auto Qi = new float [][];
+  auto Qi = new float [row2][col2];
   
   //Lax Initial Conditions
   for(int x = 0; x <= 1; x+=dx){
@@ -29,22 +34,26 @@ float mainJobA(int L, float g, dx, dt, IM){
   }
   
   //create array Qold = Qi
-  auto Qold = new float [][];
+  auto Qold = new float [row2][col2];
   memcpy(Qold, Qi, sizeof(Qold));
   //create array Qnew = Qold
-  auto Qnew = new float [][];
+  auto Qnew = new float [row2][col2];
   memcpy(Qnew, Qold, sizeof(Qnew));
   
   //Initial Flow Properties
-  auto rhoi = new float [][];
-  auto ui = new float [][];
-  auto eti = new float [][];
-  auto pi = new float [][];
-  auto a = new float [][];
-  auto E = new float [][];
-  auto eigen = new float [][];
+  
   
   //create array rhoi, ui, eti, pi, a, E, eigen
+  auto rhoi = new float [row1][col1];
+  auto ui = new float [row1][col1];
+  auto eti = new float [row1][col1];
+  auto pi = new float [row1][col1];
+  auto a = new float [row1][col1];
+  auto E = new float [row2][col2];
+  auto eigen = new float [row2][col2];
+  
+  auto alpha = new float [row1][col1];
+  
   for(int i = 1; i < IM+1; i++){
     //Density
     rhoi[i][] = Qi[1][i];
@@ -81,19 +90,23 @@ float mainJobA(int L, float g, dx, dt, IM){
   int k = 1;
   
   //initialize rho,u,et,p,a,E,eigen, F,Qn1
-  auto rho = new float [][];
-  auto u = new float [][];
-  auto et = new float [][];
-  auto p = new float [][];
-  auto a = new float [][];
-  auto E = new float [][];
-  auto eigen = new float [][];
-  auto F = new float [][];
-  auto Qn1 = new float [][];
+  auto rho = new float [row1][col1];
+  auto u = new float [row1][col1];
+  auto et = new float [row1][col1];
+  auto p = new float [row1][col1];
+  auto a = new float [row1][col1];
+  auto E = new float [row2][col2];
+  auto eigen = new float [row2][col2];
+  auto F = new float [row2][100];
+  auto Qn1 = new float [row2][col2];
+  auto rhom = new float [row1][col3];
+  auto um = new float [row1][col3];
+  auto etm = new float [row1][col3];
+  auto pm = new float [row1][col3];
   
   for(int t = 0; t <= 0.16; t+=dt){
     //call helperJobB
-    F[][] = helperJobB(); //Flux
+    memcpy(F,helperJobB(alpha,E,Qold,Qnew,F),sizeof(F)); //Flux
     
     for(int j = 1; j <= 3; j++){
       for(int i = 2; i <= IM; i++){
@@ -139,6 +152,27 @@ float mainJobA(int L, float g, dx, dt, IM){
     k += 1;
   }
   
+  delete[] rho;
+  delete[] u;
+  delete[] et;
+  delete[] p;
+  delete[] a;
+  delete[] E;
+  delete[] eigen;
+  delete[] alpha;
+  delete[] F;
+  delete[] Qn1;
+  delete[] Qi;
+  delete[] Qnew;
+  delete[] Qold;
+  
+  //cout
+  cout << rhom << "\n" << um << "\n" << etm << "\n" << pm << "\n";
+  
+  delete[] rhom;
+  delete[] um;
+  delete[] etm;
+  delete[] pm;
   //return ;
 }
 /*int max_itr = 10;
