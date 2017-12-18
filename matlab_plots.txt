@@ -1,29 +1,19 @@
+%include files with values for plots
+
 figure(1)
-plot(0:dx:1,ui,'k',0:dx:1,um(:,21),'k--sq',0:dx:1,um(:,41),'k--^',0:dx:1,um(:,81),'k--v')
+plot()
 xlabel('X-Domain')
 ylabel('Velcoity')
 title('Shock Tube Velocity Profile, CFL = 0.8')
 
 figure(2)
-plot(0:dx:1,rhoi,'k',0:dx:1,rhom(:,21),'k--sq',0:dx:1,rhom(:,41),'k--^',0:dx:1,rhom(:,81),'k--v')
+plot()
 xlabel('X-Domain')
 ylabel('Density')
 title('Shock Tube Density Profile, CFL = 0.8')
 
 figure(3)
-plot(0:dx:1,pi,'k',0:dx:1,pm(:,21),'k--sq',0:dx:1,pm(:,41),'k--^',0:dx:1,pm(:,81),'k--v')
+plot()
 xlabel('X-Domain')
 ylabel('Pressure')
 title('Shock Tube Pressure Profile, CFL = 0.8')
-
-figure(4)
-plot(0:dx:1,um(:,end),'k--v',0:dx:1,um2(:,end),'k--^',0:dx:1,um3(:,end),'k--sq')
-xlabel('X-Domain')
-ylabel('Velcoity')
-title('Shock Tube Velocity Profile, t = 0.16')
-
-figure(5)
-plot(0:dx:1,pm(:,end),'k--v',0:dx:1,pm2(:,end),'k--^',0:dx:1,pm3(:,end),'k--sq')
-xlabel('X-Domain')
-ylabel('Velcoity')
-title('Shock Tube Velocity Profile, t = 0.16')
