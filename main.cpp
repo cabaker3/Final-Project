@@ -50,13 +50,11 @@ int main(int argc, char *argv[]) {
 	}else{
 		L = atoi(argv[6]);
 	}
-	
-	errPlots = 1;
 
 	double start = omp_get_wtime();
 	
 	#pragma omp parallel shared (L,g,dx.dt,IM)
-		float result = mainJobA(L,g,dx.dt,IM); //save to array
+		mainJobA(L,g,dx,dt,IM); 
 	
 	double stop = omp_get_wtime();
 	
