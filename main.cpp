@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
 	if (argc != 7) {
 		IM = L/dx;
 	}else{
-		L = atoi(argv[6]);
+		IM = atoi(argv[6]);
 	}
 
 	double start = omp_get_wtime();
