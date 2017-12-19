@@ -4,7 +4,7 @@
 
 //run on the GPU
 
-float *helperJobB_godunov(float alpha[][], float E[][], float Qold[][], float Qnew[][], float F[][]){
+float *helperJobB_godunov(float alpha[101][1], float E[3][101], float Qold[3][101], float Qnew[3][101], float F[3][100], float IM){
   
   for(int j = 1; j <= 3; j++){
     for(int i = 1; i <= IM; i++)
