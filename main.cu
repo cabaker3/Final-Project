@@ -1,10 +1,9 @@
 #include <iostream>
 #include "omp.h"
+#include <cuda.h>
 #include <fstream>
-#define OMPI_SKIP_MPICXX  /* Don't use OpenMPI's C++ bindings (they are deprecated) */
-#include <mpi.h>
 #include "mainJobA_godunov.cpp"
-#include "helperJobB_godunov.cpp"
+#include "helperJobB_kernel.cu"
 
 int main(int argc, char *argv[]) {
 	//software backbone/infrastructure that allows mainJobA to carry on while helperJobB works asynchronously to update
