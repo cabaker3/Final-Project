@@ -1,5 +1,5 @@
 #include <iostream>
-#include <omp.h>
+#include "omp.h"
 #include <fstream>
 #define OMPI_SKIP_MPICXX  /* Don't use OpenMPI's C++ bindings (they are deprecated) */
 #include <mpi.h>
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
 	double start = omp_get_wtime();
 	
 	#pragma omp parallel shared (L,g,dx,dt,IM){
-		void mainJobA_godunov(L,g,dx,dt,IM); 
+		mainJobA_godunov(L,g,dx,dt,IM); 
 	}
 	
 	double stop = omp_get_wtime();
