@@ -3,9 +3,7 @@
 #include "helperJobB_kernel.cu"
 #include <math.h>
 #include <utility>
-#include <type_traits>
-#include <typeinfo>
-#include <cxxabi.h>
+#include <cuda.h>
 
 using namespace std;
 
