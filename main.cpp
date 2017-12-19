@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 	if (argc != 5) {
 		dx = 0.01;
 	}else{
-		a = atoi(argv[4]);
+		dx = atoi(argv[4]);
 	}
 	
 	if (argc != 6) {
