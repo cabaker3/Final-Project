@@ -105,6 +105,7 @@ void mainJobA_godunov(int L, float g, float dx, float dt, float IM){
     eigen[3][i] = ui[i][1]-a[i][1];
   }
   
+  #pragma omp for
   for(int i = 0; i < row1; ++i) {
     alpha[i][1] = max(abs(eigen));
   }
@@ -208,15 +209,3 @@ void mainJobA_godunov(int L, float g, float dx, float dt, float IM){
   delete[] pm;
   //return ;
 }
-/*int max_itr = 10;
-
-for (int itr =0; itr < max_itr ; itr ++)
-{
-  // compute the update for the assigned x[i]
-  // call helperJobB
-#pragma omp barrier
-{
-  // write x[i] in global memory
-}
-#pragma omp barrier
-}*/
