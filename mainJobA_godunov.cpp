@@ -11,7 +11,7 @@ using namespace std;
 
 //run on the host using OpenMP
 
-void float mainJobA(int L, float g, dx, dt, IM){
+void mainJobA_godunov(int L, float g, float dx, float dt, float IM){
   //constant
   int i = 1;
   int row1 = 101;
@@ -108,7 +108,7 @@ void float mainJobA(int L, float g, dx, dt, IM){
   #pragma omp for
   for(int t = 0; t <= 0.16; t+=dt){
     //call helperJobB
-    memcpy(F,helperJobB(alpha,E,Qold,Qnew,F),sizeof(F)); //Flux
+    memcpy(F,helperJobB_godunov(alpha,E,Qold,Qnew,F),sizeof(F)); //Flux
     
     #pragma omp for
     for(int j = 1; j <= 3; j++){
