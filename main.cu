@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
 	#pragma omp parallel shared (L,g,dx,dt,IM){
 		mainJobA_godunov(L,g,dx,dt,IM); 
 	}
-	#pragma omp parallel end
+	#pragma omp end parallel
 	
 	double stop = omp_get_wtime();
 	
