@@ -17,6 +17,8 @@ void mainJobA_godunov(int L, float g, float dx, float dt, float IM){
   const int col1 = 1;
   const int col2 = 101;
   const int col3 = 81;
+  dim3 dimBlock(3*100, 3*100);
+  dim3 dimGrid(1, 1);
   
   //create 2D array Qi
   float **Qi = new float*[row2];
@@ -81,7 +83,7 @@ void mainJobA_godunov(int L, float g, float dx, float dt, float IM){
     rhoi[i][1] = Qi[1][i];
     
     //Velocity
-    ui[i] = Qi[2][i] / rhoi[i][1];
+    ui[i][1] = Qi[2][i] / rhoi[i][1];
     
     //Total Energy
     eti[i][1] = Qi[3][i] / rhoi[i][1];
@@ -94,8 +96,8 @@ void mainJobA_godunov(int L, float g, float dx, float dt, float IM){
     
     //Intial E Matrix
     E[1][i] = rhoi[i][1]*ui[i][1];
-    E[2][i] = rhoi[i][]*pow(ui[i][1],2) + pi[i][1];
-    E[3][i] = eti[i][]*rhoi[i][1]*ui[i][1]+pi[i][1]*ui[i][1]};
+    E[2][i] = rhoi[i][1]*pow(ui[i][1],2) + pi[i][1];
+    E[3][i] = eti[i][1]*rhoi[i][1]*ui[i][1]+pi[i][1]*ui[i][1]};
     
     //Eigenvalues
     eigen[1][i] = ui[i][1];
@@ -136,7 +138,7 @@ void mainJobA_godunov(int L, float g, float dx, float dt, float IM){
   #pragma omp for
   for(int t = 0; t <= 0.16; t+=dt){
     //call helperJobB
-    memcpy(F,helperJobB_godunov(alpha,E,Qold,Qnew,F,IM),sizeof(F)); //Flux
+    helperJobB_godunov<<<dimGrid, dimBlock>>>(alpha,E,Qold,Qnew,F,IM) //Flux
     
     #pragma omp for
     for(int j = 1; j <= 3; j++){
@@ -153,33 +155,39 @@ void mainJobA_godunov(int L, float g, float dx, float dt, float IM){
     #pragma omp for
     for(int i = 1; i < IM+1; i++){
     //Density
-    rho[i][] = Qnew[1][i];
+    rho[i][1] = Qnew[1][i];
     
     //Velocity
-    u[i] = Qnew[2][i] / rho[i][];
+    u[i] = Qnew[2][i] / rho[i][1];
     
     //Total Energy
-    et[i][] = Qnew[3][i] / rho[i][];
+    et[i][1] = Qnew[3][i] / rho[i][1];
     
     //Pressure, from the equation of state
-    p[i][] = (g-1) * (rho[i][] * et[i][] - 0.5 * rho[i][] * pow(u[i][],2));
+    p[i][1] = (g-1) * (rho[i][1] * et[i][1] - 0.5 * rho[i][1] * pow(u[i][1],2));
       
     //Speed of Sound
-    a[i][] = sqrt(g*p[i][]/rho[i][]);
+    a[i][1] = sqrt(g*p[i][1]/rho[i][1]);
     
     //Intial E Matrix
-    E[][i] = {rho[i][]*u[i][], rho[i][]*pow(ui[i][],2) + p[i][], et[i][]*rho[i][]*u[i][]+p[i][]*u[i][]};
+    E[1][i] = rho[i][1]*u[i][1];
+    E[2][i] = rho[i][1]*pow(ui[i][1],2) + p[i][1];
+    E[3][i] = et[i][1]*rho[i][1]*u[i][1]+p[i][1]*u[i][1];
     
     //Eigenvalues
-    eigen[][i] = {u[i][], u[i][] + a[i][], u[i][]-a[i][]};
+    eigen[1][i] = u[i][1];
+    eigen[2][i] = u[i][1] + a[i][1]; 
+    eigen[3][i] = u[i][1]-a[i][1];
   }
     //Alpha
     alpha = max(abs(eigen));
     
-    um[][k] =u[][1];
-    rhom[][k] = rho[][1];
-    pm[][k] = p[][1];
-    etm[][k] = et[][1];
+    for(int x = 0; x <= 101; x++){
+      um[x][k] =u[x][1];
+      rhom[x][k] = rho[x][1];
+      pm[x][k] = p[x][1];
+      etm[x][k] = et[x][1];
+    }
     
     k += 1;
   }
@@ -205,5 +213,4 @@ void mainJobA_godunov(int L, float g, float dx, float dt, float IM){
   delete[] um;
   delete[] etm;
   delete[] pm;
-  //return ;
 }
