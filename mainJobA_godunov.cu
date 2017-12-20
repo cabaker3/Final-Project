@@ -121,19 +121,40 @@ void mainJobA_godunov(int L, float g, float dx, float dt, float IM){
   int k = 1;
   
   //initialize rho,u,et,p,a,E,eigen, F,Qn1
-  auto rho = new float [row1][col1];
-  auto u = new float [row1][col1];
-  auto et = new float [row1][col1];
-  auto p = new float [row1][col1];
-  auto a = new float [row1][col1];
-  auto E = new float [row2][col2];
-  auto eigen = new float [row2][col2];
-  auto F = new float [row2][100];
-  auto Qn1 = new float [row2][col2];
-  auto rhom = new float [row1][col3];
-  auto um = new float [row1][col3];
-  auto etm = new float [row1][col3];
-  auto pm = new float [row1][col3];
+  float **rho = new float*[row1];
+  float **u = new float*[row1];
+  for(int i = 0; i < row1; ++i) {
+    rho[i] = new float[col1];
+    u[i] = new float[col1];
+    et[i] = new float[col1];
+    p[i] = new float[col1];
+    a[i] = new float[col1];
+  }
+ 
+  float **E = new float*[row2];
+  float **eigen = new float*[row2];
+  float **Qn1 = new float*[row2];
+  for(int i = 0; i < row2; ++i) {
+    E[i] = new float[col2];
+    eigen[i] = new float[col2];
+    Qn1[i] = new float[col2];
+  }
+
+  float **rhom = new float*[row1];
+  float **um = new float*[row1];
+  float **etm = new float*[row1];
+  float **pm = new float*[row1];
+  for(int i = 0; i < row1; ++i) {
+    rhom[i] = new float[col3];
+    um[i] = new float[col3];
+    etm[i] = new float[col3];
+    pm[i] = new float[col3];
+  }
+
+  float **F = new float*[row2];
+  for(int i = 0; i < row2; ++i) {
+    F[i] = new float[100];
+  }
   
   #pragma omp for
   for(int t = 0; t <= 0.16; t+=dt){
@@ -147,10 +168,13 @@ void mainJobA_godunov(int L, float g, float dx, float dt, float IM){
       }
     }
     
-    Qn1[][1] = Qi[][1];
-    Qn1[][101] = Qi[][101];
-    Qnew = Qn1;
-    Qold = Qnew;
+    for(int x = 0; x <= 3; x++){
+    Qn1[x][1] = Qi[x][1];
+    Qn1[x][101] = Qi[x][101];
+    }
+    
+    memcpy(Qnew, Qn1, sizeof(Qnew));
+    memcpy(Qold, Qnew, sizeof(Qold));
     
     #pragma omp for
     for(int i = 1; i < IM+1; i++){
@@ -206,7 +230,7 @@ void mainJobA_godunov(int L, float g, float dx, float dt, float IM){
   delete[] Qnew;
   delete[] Qold;
   
-  //cout
+  // display properties matrices 
   cout << rhom << "\n" << um << "\n" << etm << "\n" << pm << "\n";
   
   delete[] rhom;
