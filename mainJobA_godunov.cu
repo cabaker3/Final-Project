@@ -138,9 +138,9 @@ void mainJobA_godunov(int L, float g, float dx, float dt, float IM){
   #pragma omp for
   for(int t = 0; t <= 0.16; t+=dt){
     //call helperJobB
-    helperJobB_godunov<<<dimGrid, dimBlock>>>(alpha,E,Qold,Qnew,F,IM) //Flux
+    helperJobB_godunov<<<dimGrid, dimBlock>>>(alpha,E,Qold,Qnew,F,IM); //Flux
     
-    #pragma omp for
+    #pragma omp barrier
     for(int j = 1; j <= 3; j++){
       for(int i = 2; i <= IM; i++){
         Qn1[j][i] = Qold[j][i] - (dt/dx) * (F[j][i] - F[j][i-1]); 
