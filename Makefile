@@ -23,14 +23,14 @@ debug : $(EXEC)
 
 all : main mainJobA helperJobB
 
-main: main.cpp
-	mpicxx $(CXXSTD) $(WFLAGS) $(OPT) -fopenmp -o $@ $<
+main: main.cu
+	module load cuda;nvcc -o main $(OPT) main.cu -fopenmp -ccbin $(BIN)
 	
 mainJobA: mainJobA_godunov.cu
-	$(CXXSTD) $(WFLAGS) $(OPT) -fopenmp -o $@ $<
+	module load cuda;nvcc -o mainJobA_godunov $(OPT) mainJobA_godunov.cu -fopenmp -ccbin $(BIN)
 
 helperJobB: helperJobB_kernel.cu
-	$(CXXSTD) $(WFLAGS) $(OPT) -fopenmp -o $@ $<
+	module load cuda;nvcc -o helperJobB_kernel $(OPT) helperJobB_kernel.cu -fopenmp -ccbin $(BIN)
 
 .PHONY: clean
 clean:
